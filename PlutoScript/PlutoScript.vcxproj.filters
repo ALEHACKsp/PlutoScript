@@ -36,8 +36,8 @@
     <ClInclude Include="Datatypes.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="HookManager.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClInclude Include="FunctionManager.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +54,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Script.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="HookManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="FunctionManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

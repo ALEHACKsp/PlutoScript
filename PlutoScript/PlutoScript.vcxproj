@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Datatypes.h" />
+    <ClInclude Include="FunctionManager.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="PlutoScript.h" />
     <ClInclude Include="Script.h" />
@@ -157,7 +158,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-	<ClCompile Include="HookManager.cpp" />
+    <ClCompile Include="FunctionManager.cpp" />
+    <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="PlutoScript.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptManager.cpp" />

@@ -13,5 +13,6 @@ namespace ScriptManager
 		void ExecuteScripts();
 
 	}
+	void Release();
 	void Initialize();
 }

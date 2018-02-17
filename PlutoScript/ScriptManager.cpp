@@ -45,11 +45,22 @@ namespace ScriptManager
 
 				if (script.Entry == nullptr)
 				{
-					MessageBoxA(NULL, "Could not find kanker entry point", "", 0);
+					FunctionManager::WriteToServerConsole("[PlutoScript]::Could not find EntryPoint in " + script.Name + "\n");
 					return;
 				}
 				script.Execute();
+				FunctionManager::WriteToServerConsole("[PlutoScript]::Executing Script: " + script.Name + "\n");
 			}
+		}
+	}
+
+	void Release()
+	{
+		if (!Scripts.empty())
+		{
+			for (auto &script : Scripts)
+				FreeLibrary(script.Module);
+			Scripts.clear();
 		}
 	}
 

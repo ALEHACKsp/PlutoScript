@@ -1,6 +1,7 @@
 #include "stdafx.h"
 std::vector<HookManager::OnSay> HookManager::Internal::OnSayCallbacks;
 HookManager::OnSay HookManager::Internal::OnSayReturn;
+bool HookManager::IsInitialized = false;
 
 namespace HookManager
 {
@@ -27,14 +28,14 @@ namespace HookManager
 
 			return (jmp - len);
 		}
-	}
 
-	void Internal::HookedOnSay(Entity* entity, int team, char* message)
-	{
-		for (auto &callback : OnSayCallbacks)
-			callback(entity, team, message);
+		void HookedOnSay(Entity* entity, int team, char* message)
+		{
+			for (auto &callback : OnSayCallbacks)
+				callback(entity, team, message);
 
-		return OnSayReturn(entity, team, message);
+			return OnSayReturn(entity, team, message);
+		}
 	}
 
 	__declspec(dllexport) void InstallOnSay(OnSay onSay)
@@ -45,5 +46,6 @@ namespace HookManager
 	void Initialize()
 	{
 		Internal::OnSayReturn = reinterpret_cast<OnSay>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x0047E900), reinterpret_cast<BYTE*>(Internal::HookedOnSay), 0x6));
+		IsInitialized = true;
 	}
 }

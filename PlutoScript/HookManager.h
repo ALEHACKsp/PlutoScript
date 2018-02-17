@@ -12,8 +12,10 @@ namespace HookManager
 		extern std::vector<OnSay> OnSayCallbacks;
 		extern OnSay OnSayReturn;
 		void HookedOnSay(Entity* entity, int team, char* message);
+
 	}
 
+	extern bool IsInitialized;
 	void Initialize();
 
 	__declspec(dllexport) void InstallOnSay(OnSay onSay);
