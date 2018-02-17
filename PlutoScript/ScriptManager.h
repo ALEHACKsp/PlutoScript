@@ -13,6 +13,7 @@ namespace ScriptManager
 		void ExecuteScripts();
 
 	}
-	void Release();
+
+	extern bool IsInitialized;
 	void Initialize();
 }

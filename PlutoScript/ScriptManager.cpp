@@ -2,6 +2,7 @@
 #include <filesystem>
 
 std::vector<Script> ScriptManager::Scripts;
+bool ScriptManager::IsInitialized = false;
 
 namespace ScriptManager
 {
@@ -41,8 +42,6 @@ namespace ScriptManager
 		{
 			for (auto &script : Scripts)
 			{
-				MessageBoxA(NULL, (std::string("Executes ") + script.Name).c_str(), "", 0);
-
 				if (script.Entry == nullptr)
 				{
 					FunctionManager::WriteToServerConsole("[PlutoScript]::Could not find EntryPoint in " + script.Name + "\n");
@@ -54,20 +53,12 @@ namespace ScriptManager
 		}
 	}
 
-	void Release()
-	{
-		if (!Scripts.empty())
-		{
-			for (auto &script : Scripts)
-				FreeLibrary(script.Module);
-			Scripts.clear();
-		}
-	}
-
 	void Initialize()
 	{
 		Internal::LoadScripts();
 		Internal::GetScriptEntryPoints();
 		Internal::ExecuteScripts();
+
+		IsInitialized = true;
 	}
 }

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 std::vector<HookManager::OnSay> HookManager::Internal::OnSayCallbacks;
-HookManager::OnSay HookManager::Internal::OnSayReturn;
+HookManager::Internal::OnSayNative HookManager::Internal::OnSayReturn;
 bool HookManager::IsInitialized = false;
 
 namespace HookManager
@@ -45,7 +45,7 @@ namespace HookManager
 
 	void Initialize()
 	{
-		Internal::OnSayReturn = reinterpret_cast<OnSay>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x0047E900), reinterpret_cast<BYTE*>(Internal::HookedOnSay), 0x6));
+		Internal::OnSayReturn = reinterpret_cast<Internal::OnSayNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x0047E900), reinterpret_cast<BYTE*>(Internal::HookedOnSay), 0x6));
 		IsInitialized = true;
 	}
 }
