@@ -1,0 +1,6 @@
+Microsoft (R) COFF/PE Dumper Version 14.12.25834.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file PlutoScript.lib
+LINK : fatal error LNK1181: Eingabedatei "PlutoScript.lib" kann nicht geöffnet werden.

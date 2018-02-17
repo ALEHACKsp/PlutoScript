@@ -30,6 +30,15 @@
     <ClInclude Include="Script.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="HookManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Datatypes.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="HookManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
