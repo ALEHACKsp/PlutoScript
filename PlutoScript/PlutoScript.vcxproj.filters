@@ -24,6 +24,12 @@
     <ClInclude Include="PlutoScript.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -33,6 +39,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
