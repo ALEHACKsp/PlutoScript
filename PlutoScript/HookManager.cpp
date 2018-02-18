@@ -5,32 +5,12 @@ HookManager::Internal::OnSayNative HookManager::Internal::OnSayReturn;
 std::vector<HookManager::OnConnect> HookManager::Internal::OnConnectCallbacks;
 std::vector<HookManager::OnDisconnect> HookManager::Internal::OnDisconnectCallbacks;
 
+std::vector<HookManager::OnPlayerKilled> HookManager::Internal::OnPlayerKilledCallbacks;
+HookManager::Internal::OnPlayerKilledNative HookManager::Internal::OnPlayerKilledReturn;
+
+HookManager::Internal::OnNotifyNative HookManager::Internal::OnNotifyReturn;
+
 bool HookManager::IsInitialized = false;
-
-//some magic
-int functionHandle;
-int objectReference;
-int returnAdress = 0x004F0289;
-__declspec(naked) void HookedExecEntThreadNum()
-{
-	__asm mov[functionHandle], eax;
-	__asm mov[objectReference], ecx;
-
-	__asm pushad;
-	__asm pushfd;
-
-	HookManager::Internal::ExecEntThreadNumHelper(functionHandle, objectReference);
-
-	__asm popfd;
-	__asm popad;
-
-	__asm push ebp;
-	__asm mov ebp, esp;
-	__asm and esp, 0x0FFFFFFF8;
-	__asm sub esp, 8;
-
-	__asm jmp[returnAdress];
-}
 
 namespace HookManager
 {
@@ -66,22 +46,46 @@ namespace HookManager
 			return OnSayReturn(entity, team, message);
 		}
 
-		void ExecEntThreadNumHelper(int functionHandle,int objectReference)
+		void HookedOnPlayerKilled(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage,
+			int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a1, int hitLocation, int a2)
 		{
-			if (functionHandle == 412300)
-				for (auto &callback : OnConnectCallbacks)
-					callback(FunctionManager::Internal::GetEntityFromObjectReference(objectReference));
-			if (functionHandle == 412332)
-				for (auto &callback : OnDisconnectCallbacks)
-					callback(FunctionManager::Internal::GetEntityFromObjectReference(objectReference));
+			for (auto &callback : OnPlayerKilledCallbacks)
+				callback(playerWhoDied, inflictor, playerWhoKilled, &damage, &mod, &weaponIndex, &alternateWeapon, direction, &hitLocation);
+
+			return OnPlayerKilledReturn(playerWhoDied, inflictor, playerWhoKilled, damage, mod, weaponIndex, alternateWeapon, direction, a1, hitLocation, a2);
+		}
+
+		void HookedOnNotify(int object, int notify, int a1)
+		{
+			if (object)
+			{
+
+				if (notify == 8907)
+					for (auto &callback : OnConnectCallbacks)
+						callback(FunctionManager::Internal::GetEntityFromObjectReference(object));
+				if (notify == 3188 && a1 == 2 && reinterpret_cast<ScriptEnviorment*>(0x001F58080)->Top->Value.Integer == 1422)
+				{
+					for (auto &callback : OnDisconnectCallbacks)
+						callback(FunctionManager::Internal::GetEntityFromObjectReference(object));
+					//auto scriptEnv = reinterpret_cast<ScriptEnviorment*>(0x001F58080);
+					//char buffer[1024];
+
+					//auto x = scriptEnv->Top;
+					//auto y = &scriptEnv->Top[-1];
+					//auto z = &scriptEnv->Top[-2];
+					//sprintf_s(buffer, "Menusresponse: InParams: %i | OutParams: %i \n Top_Type : %i | Top_Value : %i \n -1_Typ:e %i | -1_Value: %i \n -2_Type: %i | -2_Value : %i\n", scriptEnv->InParametersCount,scriptEnv->OutParametersCount,x->Type,x->Value.Integer,y->Type,y->Value.Integer,z->Type,z->Value.Integer);
+					//FunctionManager::WriteToServerConsole(buffer);
+				}
+			}
+			return OnNotifyReturn(object, notify, a1);
 		}
 	}
-
 
 	void Initialize()
 	{
 		Internal::OnSayReturn = reinterpret_cast<Internal::OnSayNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x0047E900), reinterpret_cast<BYTE*>(Internal::HookedOnSay), 0x6));
-		Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004F0280), reinterpret_cast<BYTE*>(HookedExecEntThreadNum), 0x6);
+		Internal::OnPlayerKilledReturn = reinterpret_cast<Internal::OnPlayerKilledNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004AD030), reinterpret_cast<BYTE*>(Internal::HookedOnPlayerKilled), 0x6));
+		Internal::OnNotifyReturn = reinterpret_cast<Internal::OnNotifyNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004EFBB0), reinterpret_cast<BYTE*>(Internal::HookedOnNotify), 0x7));
 
 		IsInitialized = true;
 	}
@@ -99,5 +103,10 @@ namespace HookManager
 	__declspec(dllexport) void InstallOnDisconnect(OnDisconnect onDisconnect)
 	{
 		Internal::OnDisconnectCallbacks.push_back(onDisconnect);
+	}
+
+	__declspec(dllexport) void InstallOnPlayerKilled(OnPlayerKilled onPlayerKilled)
+	{
+		Internal::OnPlayerKilledCallbacks.push_back(onPlayerKilled);
 	}
 }

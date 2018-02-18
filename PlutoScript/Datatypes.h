@@ -2,7 +2,7 @@
 #pragma once
 #include <Windows.h>
 
-typedef float vec3_t[3];
+typedef float Vector3D[3];
 typedef BYTE byte;
 
 enum EntityFlags
@@ -32,7 +32,7 @@ struct PlayerState
 	int PredictableEvents[4];
 	int PredictableEventParms[4];
 	unsigned __int8 unk2[56];
-	vec3_t Viewangles;
+	Vector3D Viewangles;
 	char unk3[272];
 	int HeldWeapons[15];
 	WeaponInfo WeaponInfos[15];
@@ -167,8 +167,8 @@ struct SharedEntity
 	byte unk1[24];
 	int Contents;
 	byte unk2[24];
-	vec3_t CurrentOrigin;
-	vec3_t CurrentAngles;
+	Vector3D CurrentOrigin;
+	Vector3D CurrentAngles;
 	int OwnerNum;
 	int EventTime;
 	Client *Client;
@@ -189,9 +189,9 @@ struct EntityState
 	EntityType Type;
 	int EntityFlags;
 	unsigned __int8 unk2[12];
-	vec3_t Origin;
+	Vector3D Origin;
 	unsigned __int8 unk3[24];
-	vec3_t ViewAngles;
+	Vector3D ViewAngles;
 	unsigned __int8 unk4[184];
 };
 
@@ -199,4 +199,46 @@ struct Entity
 {
 	EntityState State;
 	SharedEntity Shared;
+};
+
+union VariableUnion
+{
+	const char* RawString;
+	unsigned __int16 ObjectRef;
+	float Number;
+	unsigned __int16 String;
+	float* Vector;
+	int Integer;
+};
+
+enum ScriptType
+{
+	Undefined = 0x0,
+	Object = 0x1,
+	String = 0x2,
+	IString = 0x3,
+	Vector = 0x4,
+	Float = 0x5,
+	Integer = 0x6,
+	Invalid = 0x8,
+	Animation = 0xD,
+};
+
+struct VariableValue
+{
+	VariableUnion Value;
+	ScriptType Type;
+};
+
+struct ScriptEnviorment
+{
+	unsigned int *LocalVariables;
+	VariableValue *MaxStack;
+	int FunctionCount;
+	void *FunctionFrame;
+	VariableValue *Top;
+	unsigned int InParametersCount;
+	unsigned int OutParametersCount;
+	unsigned int unk;
+	VariableValue Stack[2048];
 };
