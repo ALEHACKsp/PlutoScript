@@ -7,10 +7,14 @@ namespace FunctionManager
 		extern SendServerCommandPrototype SendServerCommand;
 		using SystemPrintPrototype = void(__cdecl*)(const char* msg);
 		extern SystemPrintPrototype SystemPrint;
+
+		using GetEntityFromObjectReferencePrototype = Entity * (__cdecl*)(int objectReference);
+		extern GetEntityFromObjectReferencePrototype GetEntityFromObjectReference;
 	}
 
 	extern bool IsInitialized;
 	void Initialize();
 	__declspec(dllexport) void WriteToServerConsole(std::string message);
 	__declspec(dllexport) void WriteToChat(std::string message);
+
 }

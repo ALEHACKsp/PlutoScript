@@ -1,6 +1,7 @@
 #include "stdafx.h"
 FunctionManager::Internal::SendServerCommandPrototype FunctionManager::Internal::SendServerCommand;
 FunctionManager::Internal::SystemPrintPrototype FunctionManager::Internal::SystemPrint;
+FunctionManager::Internal::GetEntityFromObjectReferencePrototype FunctionManager::Internal::GetEntityFromObjectReference;
 bool FunctionManager::IsInitialized = false;
 
 namespace FunctionManager
@@ -9,6 +10,8 @@ namespace FunctionManager
 	{
 		Internal::SendServerCommand = reinterpret_cast<Internal::SendServerCommandPrototype>(0x004FD8E0);
 		Internal::SystemPrint = reinterpret_cast<Internal::SystemPrintPrototype>(0x004D8E80);
+		Internal::GetEntityFromObjectReference = reinterpret_cast<Internal::GetEntityFromObjectReferencePrototype>(0x004B18E0);
+
 		IsInitialized = true;
 	}
 
