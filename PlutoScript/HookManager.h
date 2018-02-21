@@ -8,6 +8,7 @@ namespace HookManager
 	using OnConnect = void(__cdecl*)(Entity* entity);
 	using OnDisconnect = void(__cdecl*)(Entity* entity);
 	using OnPlayerKilled = void(__cdecl*)(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int* damage, int* mod, int* weaponIndex, bool* alternateWeapon, Vector3D direction, int* hitLocation);
+	using OnPlayerDamaged = void(__cdecl*)(Entity* playerWhoWasDamaged, Entity* inflictor, Entity* playerWhoDamaged, int* damage, int* mod, int* weaponIndex, bool* alternateWeapon, Vector3D direction, int* hitLocation);
 
 	namespace Internal
 	{
@@ -17,6 +18,7 @@ namespace HookManager
 		extern std::vector<OnConnect> OnConnectCallbacks;
 		extern std::vector<OnDisconnect> OnDisconnectCallbacks;
 		extern std::vector<OnPlayerKilled> OnPlayerKilledCallbacks;
+		extern std::vector<OnPlayerDamaged> OnPlayerDamagedCallbacks;
 
 
 		using OnSayNative = void(__cdecl*)(Entity* entity, int team, char* message);
@@ -27,9 +29,13 @@ namespace HookManager
 		extern OnNotifyNative OnNotifyReturn;
 		void HookedOnNotify(int object, int notify, int a1);
 
-		using OnPlayerKilledNative = void(__cdecl*)(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a1,int hitLocation,int a2);
+		using OnPlayerKilledNative = void(__cdecl*)(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int hitLocation, int a1, int a2);
 		extern OnPlayerKilledNative OnPlayerKilledReturn;
-		void HookedOnPlayerKilled(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a1, int hitLocation, int a2);
+		void HookedOnPlayerKilled(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int hitLocation,int a1, int a2);
+
+		using OnPlayerDamagedNative = void(__cdecl*)(Entity* playerWhoWasDamaged, Entity* inflictor, Entity* playerWhoDamaged, int damage, int a1, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a2, int hitLocation, int a3);
+		extern OnPlayerDamagedNative OnPlayerDamagedReturn;
+		void HookedOnPlayerDamaged(Entity* playerWhoWasDamaged, Entity* inflictor, Entity* playerWhoDamaged, int damage, int a1, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a2, int hitLocation, int a3);
 	}
 
 	extern bool IsInitialized;
@@ -39,4 +45,5 @@ namespace HookManager
 	__declspec(dllexport) void InstallOnConnect(OnConnect onConnect);
 	__declspec(dllexport) void InstallOnDisconnect(OnDisconnect onDisconnect);
 	__declspec(dllexport) void InstallOnPlayerKilled(OnPlayerKilled onPlayerKilled);
+	__declspec(dllexport) void InstallOnPlayerDamaged(OnPlayerDamaged onPlayerDamaged);
 }

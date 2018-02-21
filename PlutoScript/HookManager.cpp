@@ -10,6 +10,9 @@ HookManager::Internal::OnPlayerKilledNative HookManager::Internal::OnPlayerKille
 
 HookManager::Internal::OnNotifyNative HookManager::Internal::OnNotifyReturn;
 
+std::vector<HookManager::OnPlayerDamaged> HookManager::Internal::OnPlayerDamagedCallbacks;
+HookManager::Internal::OnPlayerDamagedNative HookManager::Internal::OnPlayerDamagedReturn;
+
 bool HookManager::IsInitialized = false;
 
 namespace HookManager
@@ -47,12 +50,21 @@ namespace HookManager
 		}
 
 		void HookedOnPlayerKilled(Entity* playerWhoDied, Entity* inflictor, Entity* playerWhoKilled, int damage,
-			int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a1, int hitLocation, int a2)
+			int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int hitLocation, int a1, int a2)
 		{
 			for (auto &callback : OnPlayerKilledCallbacks)
 				callback(playerWhoDied, inflictor, playerWhoKilled, &damage, &mod, &weaponIndex, &alternateWeapon, direction, &hitLocation);
 
-			return OnPlayerKilledReturn(playerWhoDied, inflictor, playerWhoKilled, damage, mod, weaponIndex, alternateWeapon, direction, a1, hitLocation, a2);
+			return OnPlayerKilledReturn(playerWhoDied, inflictor, playerWhoKilled, damage, mod, weaponIndex, alternateWeapon, direction, hitLocation, a1, a2);
+		}
+
+		void HookedOnPlayerDamaged(Entity* playerWhoWasDamaged, Entity* inflictor, Entity* playerWhoDamaged, int damage,
+			int a1, int mod, int weaponIndex, bool alternateWeapon, Vector3D direction, int a2, int hitLocation, int a3)
+		{
+			for (auto &callback : OnPlayerDamagedCallbacks)
+				callback(playerWhoWasDamaged, inflictor, playerWhoDamaged, &damage, &mod, &weaponIndex, &alternateWeapon, direction, &hitLocation);
+
+			return OnPlayerDamagedReturn(playerWhoWasDamaged, inflictor, playerWhoDamaged, damage, a1, mod, weaponIndex, alternateWeapon, direction, a2, hitLocation, a3);
 		}
 
 		void HookedOnNotify(int object, int notify, int a1)
@@ -84,9 +96,11 @@ namespace HookManager
 	void Initialize()
 	{
 		Internal::OnSayReturn = reinterpret_cast<Internal::OnSayNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x0047E900), reinterpret_cast<BYTE*>(Internal::HookedOnSay), 0x6));
-		Internal::OnPlayerKilledReturn = reinterpret_cast<Internal::OnPlayerKilledNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004AD030), reinterpret_cast<BYTE*>(Internal::HookedOnPlayerKilled), 0x6));
-		Internal::OnNotifyReturn = reinterpret_cast<Internal::OnNotifyNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004EFBB0), reinterpret_cast<BYTE*>(Internal::HookedOnNotify), 0x7));
 
+		Internal::OnPlayerKilledReturn = reinterpret_cast<Internal::OnPlayerKilledNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004AD030), reinterpret_cast<BYTE*>(Internal::HookedOnPlayerKilled), 0x6));
+		Internal::OnPlayerDamagedReturn = reinterpret_cast<Internal::OnPlayerDamagedNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004ACE50), reinterpret_cast<BYTE*>(Internal::HookedOnPlayerDamaged), 0x6));
+
+		Internal::OnNotifyReturn = reinterpret_cast<Internal::OnNotifyNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004EFBB0), reinterpret_cast<BYTE*>(Internal::HookedOnNotify), 0x7));
 		IsInitialized = true;
 	}
 
@@ -108,5 +122,10 @@ namespace HookManager
 	__declspec(dllexport) void InstallOnPlayerKilled(OnPlayerKilled onPlayerKilled)
 	{
 		Internal::OnPlayerKilledCallbacks.push_back(onPlayerKilled);
+	}
+
+	__declspec(dllexport) void InstallOnPlayerDamaged(OnPlayerDamaged onPlayerDamaged)
+	{
+		Internal::OnPlayerDamagedCallbacks.push_back(onPlayerDamaged);
 	}
 }
