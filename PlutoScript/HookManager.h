@@ -40,10 +40,13 @@ namespace HookManager
 
 	extern bool IsInitialized;
 	void Initialize();
+}
 
-	__declspec(dllexport) void InstallOnSay(OnSay onSay);
-	__declspec(dllexport) void InstallOnConnect(OnConnect onConnect);
-	__declspec(dllexport) void InstallOnDisconnect(OnDisconnect onDisconnect);
-	__declspec(dllexport) void InstallOnPlayerKilled(OnPlayerKilled onPlayerKilled);
-	__declspec(dllexport) void InstallOnPlayerDamaged(OnPlayerDamaged onPlayerDamaged);
+namespace PlutoniumScript
+{
+	__declspec(dllexport) void InstallOnSay(HookManager::OnSay onSay);
+	__declspec(dllexport) void InstallOnConnect(HookManager::OnConnect onConnect);
+	__declspec(dllexport) void InstallOnDisconnect(HookManager::OnDisconnect onDisconnect);
+	__declspec(dllexport) void InstallOnPlayerKilled(HookManager::OnPlayerKilled onPlayerKilled);
+	__declspec(dllexport) void InstallOnPlayerDamaged(HookManager::OnPlayerDamaged onPlayerDamaged);
 }

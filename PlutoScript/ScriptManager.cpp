@@ -44,11 +44,11 @@ namespace ScriptManager
 			{
 				if (script.Entry == nullptr)
 				{
-					FunctionManager::WriteToServerConsole("[PlutoScript]::Could not find EntryPoint in " + script.Name + "\n");
+					PlutoniumScript::WriteToServerConsole("[PlutoScript]::Could not find EntryPoint in " + script.Name + "\n");
 					return;
 				}
 				script.Execute();
-				FunctionManager::WriteToServerConsole("[PlutoScript]::Executing Script: " + script.Name + "\n");
+				PlutoniumScript::WriteToServerConsole("[PlutoScript]::Executing Script: " + script.Name + "\n");
 			}
 		}
 	}

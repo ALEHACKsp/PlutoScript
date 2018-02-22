@@ -14,7 +14,10 @@ namespace FunctionManager
 
 	extern bool IsInitialized;
 	void Initialize();
+}
+
+namespace PlutoniumScript
+{
 	__declspec(dllexport) void WriteToServerConsole(std::string message);
 	__declspec(dllexport) void WriteToChat(std::string message);
-
 }

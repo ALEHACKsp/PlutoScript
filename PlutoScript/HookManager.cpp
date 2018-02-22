@@ -103,29 +103,33 @@ namespace HookManager
 		Internal::OnNotifyReturn = reinterpret_cast<Internal::OnNotifyNative>(Internal::DetourFunction(reinterpret_cast<BYTE*>(0x004EFBB0), reinterpret_cast<BYTE*>(Internal::HookedOnNotify), 0x7));
 		IsInitialized = true;
 	}
+}
 
-	__declspec(dllexport) void InstallOnSay(OnSay onSay)
+namespace PlutoniumScript
+{
+
+	__declspec(dllexport) void InstallOnSay(HookManager::OnSay onSay)
 	{
-		Internal::OnSayCallbacks.push_back(onSay);
+		HookManager::Internal::OnSayCallbacks.push_back(onSay);
 	}
 
-	__declspec(dllexport) void InstallOnConnect(OnConnect onConnect)
+	__declspec(dllexport) void InstallOnConnect(HookManager::OnConnect onConnect)
 	{
-		Internal::OnConnectCallbacks.push_back(onConnect);
+		HookManager::Internal::OnConnectCallbacks.push_back(onConnect);
 	}
 
-	__declspec(dllexport) void InstallOnDisconnect(OnDisconnect onDisconnect)
+	__declspec(dllexport) void InstallOnDisconnect(HookManager::OnDisconnect onDisconnect)
 	{
-		Internal::OnDisconnectCallbacks.push_back(onDisconnect);
+		HookManager::Internal::OnDisconnectCallbacks.push_back(onDisconnect);
 	}
 
-	__declspec(dllexport) void InstallOnPlayerKilled(OnPlayerKilled onPlayerKilled)
+	__declspec(dllexport) void InstallOnPlayerKilled(HookManager::OnPlayerKilled onPlayerKilled)
 	{
-		Internal::OnPlayerKilledCallbacks.push_back(onPlayerKilled);
+		HookManager::Internal::OnPlayerKilledCallbacks.push_back(onPlayerKilled);
 	}
 
-	__declspec(dllexport) void InstallOnPlayerDamaged(OnPlayerDamaged onPlayerDamaged)
+	__declspec(dllexport) void InstallOnPlayerDamaged(HookManager::OnPlayerDamaged onPlayerDamaged)
 	{
-		Internal::OnPlayerDamagedCallbacks.push_back(onPlayerDamaged);
+		HookManager::Internal::OnPlayerDamagedCallbacks.push_back(onPlayerDamaged);
 	}
 }

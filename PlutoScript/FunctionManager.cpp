@@ -14,14 +14,18 @@ namespace FunctionManager
 
 		IsInitialized = true;
 	}
+}
+
+namespace PlutoniumScript
+{
 
 	__declspec(dllexport) void WriteToServerConsole(std::string message)
 	{
-		Internal::SystemPrint(message.c_str());
+		FunctionManager::Internal::SystemPrint(message.c_str());
 	}
 
 	__declspec(dllexport) void WriteToChat(std::string message)
 	{
-		Internal::SendServerCommand(0, 0, "%c \"\x15%s\"", 84, message.c_str());
+		FunctionManager::Internal::SendServerCommand(0, 0, "%c \"\x15%s\"", 84, message.c_str());
 	}
 }
