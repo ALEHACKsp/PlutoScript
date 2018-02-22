@@ -1,23 +1,23 @@
 #pragma once
-namespace FunctionManager
+namespace PlutoScript
 {
-	namespace Internal
+	namespace FunctionManager
 	{
-		using SendServerCommandPrototype = DWORD(__cdecl*)(int a1, int a2, const char* msg, ...);
-		extern SendServerCommandPrototype SendServerCommand;
-		using SystemPrintPrototype = void(__cdecl*)(const char* msg);
-		extern SystemPrintPrototype SystemPrint;
+		namespace Internal
+		{
+			using SendServerCommandPrototype = DWORD(__cdecl*)(int a1, int a2, const char* msg, ...);
+			extern SendServerCommandPrototype SendServerCommand;
+			using SystemPrintPrototype = void(__cdecl*)(const char* msg);
+			extern SystemPrintPrototype SystemPrint;
 
-		using GetEntityFromObjectReferencePrototype = Entity * (__cdecl*)(int objectReference);
-		extern GetEntityFromObjectReferencePrototype GetEntityFromObjectReference;
+			using GetEntityFromObjectReferencePrototype = Entity * (__cdecl*)(int objectReference);
+			extern GetEntityFromObjectReferencePrototype GetEntityFromObjectReference;
+		}
+
+		extern bool IsInitialized;
+		void Initialize();
 	}
 
-	extern bool IsInitialized;
-	void Initialize();
-}
-
-namespace PlutoniumScript
-{
 	__declspec(dllexport) void WriteToServerConsole(std::string message);
 	__declspec(dllexport) void WriteToChat(std::string message);
 }
